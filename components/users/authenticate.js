@@ -12,6 +12,7 @@ module.exports = {
       if (user && user.publicData && user.logData) {
         console.log("user.added", user.logData);
         socket.emit("user.added", user.publicData);
+        socket.broadcast.emit('global.user.added', {userName: userName});
       }
       else {
         Util.sendError(socket, "user.error", 422, "This name (" + userName + ") already exits!");
