@@ -72,6 +72,9 @@ var Game = function Game(_player1Id, _player2Id, _config, _nextPlayerId) {
     _.forEach(config.fields, function(row) {
       tmp += "[";
       _.forEach(row, function(field) {
+        if(field >= 0) {
+          tmp += " ";
+        }
         tmp += field + ", ";
       });
       tmp += "], ";
