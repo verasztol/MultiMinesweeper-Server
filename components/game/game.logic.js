@@ -24,10 +24,10 @@ function setField(x, y) {
     if (config.fields[x - 1][y - 1] === Constants.BOMB) {
       actualValue++;
     }
-    else if (config.fields[x - 1][y] === Constants.BOMB) {
+    if (config.fields[x - 1][y] === Constants.BOMB) {
       actualValue++;
     }
-    else if (config.fields[x - 1][y + 1] === Constants.BOMB) {
+    if (config.fields[x - 1][y + 1] === Constants.BOMB) {
       actualValue++;
     }
   }
@@ -35,10 +35,10 @@ function setField(x, y) {
     if (config.fields[x + 1][y + 1] === Constants.BOMB) {
       actualValue++;
     }
-    else if (config.fields[x + 1][y] === Constants.BOMB) {
+    if (config.fields[x + 1][y] === Constants.BOMB) {
       actualValue++;
     }
-    else if (config.fields[x + 1][y - 1] === Constants.BOMB) {
+    if (config.fields[x + 1][y - 1] === Constants.BOMB) {
       actualValue++;
     }
   }
