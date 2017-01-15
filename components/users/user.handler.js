@@ -97,7 +97,7 @@ module.exports = {
   resetUser: function(socketId) {
     var user = getUserBySocketId(socketId);
     if(user) {
-      user.set
+      user.resetMarkerCount();
       user.setEnemy(null);
     }
   }
