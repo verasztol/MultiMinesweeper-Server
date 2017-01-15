@@ -105,7 +105,7 @@ module.exports = {
   addScore: function(userName, score) {
     var user = getUserByName(userName);
     if(user) {
-      var tmp = score * 1000 + 500;
+      var tmp = (score + 1) * 1000;
       user.setScore(tmp + user.getScore());
       return user.getScore();
     }
