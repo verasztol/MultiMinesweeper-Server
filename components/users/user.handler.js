@@ -99,6 +99,15 @@ module.exports = {
     if(user) {
       user.resetMarkerCount();
       user.setEnemy(null);
+      user.setScore(0);
+    }
+  },
+  addScore: function(userName, score) {
+    var user = getUserByName(userName);
+    if(user) {
+      var tmp = score * 1000 + 500;
+      user.setScore(tmp + user.getScore());
+      return user.getScore();
     }
   }
 };

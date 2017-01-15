@@ -78,5 +78,15 @@ module.exports = {
   },
   resetUser: function(socketId) {
     UserHandler.resetUser(socketId);
+  },
+  calculateScore: function(shotData) {
+    if(shotData && Array.isArray(shotData) && shotData[0]) {
+      var userName = shotData[0].playerName;
+      var score = 0;
+      for(var i = 0; i < shotData.length; i++) {
+        score += shotData[i].value || 0;
+      }
+      return UserHandler.addScore(userName, score);
+    }
   }
 };

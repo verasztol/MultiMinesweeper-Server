@@ -156,8 +156,9 @@ io.on('connection', function(socket) {
                 player2Socket.emit("game.end", {winner: player2Name});
               }
               else {
-                socket.emit("game.shooted", {shooted: result, nextPlayerName: player2Name});
-                player2Socket.emit("game.shooted", {shooted: result, nextPlayerName: player2Name});
+                var score = userLogic.calculateScore(result);
+                socket.emit("game.shooted", {shooted: result, nextPlayerName: player2Name, score: score});
+                player2Socket.emit("game.shooted", {shooted: result, nextPlayerName: player2Name, score: score});
               }
             }
             else {

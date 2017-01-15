@@ -146,7 +146,7 @@ module.exports = {
       game.switchNextPlayer();
       console.log("Next player turn!", game.getCurrentPlayer());
 
-      return alreadyShootedFields;
+      return shootedFields;
     }
     return {
       error: Constants.GAME_NOT_FOUND,

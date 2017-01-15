@@ -3,6 +3,7 @@ var User = function User(_socketId, _name) {
   var socketId = _socketId;
   var enemySocketId = null;
   var markerCount = 0;
+  var score = 0;
 
   this.getName = function() {
     return name;
@@ -44,7 +45,15 @@ var User = function User(_socketId, _name) {
 
   this.resetMarkerCount = function() {
     markerCount = 0;
-  }
+  };
+
+  this.getScore = function() {
+    return score || 0;
+  };
+
+  this.setScore = function(s) {
+    score = s;
+  };
 };
 
 module.exports = User;
