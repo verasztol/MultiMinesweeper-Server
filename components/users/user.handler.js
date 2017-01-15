@@ -93,5 +93,12 @@ module.exports = {
     if(user) {
       return user.getMarkerCount();
     }
+  },
+  resetUser: function(socketId) {
+    var user = getUserBySocketId(socketId);
+    if(user) {
+      user.set
+      user.setEnemy(null);
+    }
   }
 };

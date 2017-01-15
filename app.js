@@ -149,8 +149,8 @@ io.on('connection', function(socket) {
             if (result && !result.error) {
               var player2Name = userLogic.getUserName(player2Id);
               if(result === Constants.END_GAME) {
-                userLogic.setEnemyToUser(socket.id, null);
-                userLogic.setEnemyToUser(player2Id, null);
+                userLogic.resetUser(socket.id);
+                userLogic.resetUser(player2Id);
 
                 socket.emit("game.end", {winner: player2Name});
                 player2Socket.emit("game.end", {winner: player2Name});

@@ -75,5 +75,8 @@ module.exports = {
   },
   getMarkerCount: function(userName) {
     return UserHandler.getMarkerCount(userName);
+  },
+  resetUser: function(socketId) {
+    UserHandler.resetUser(socketId);
   }
 };

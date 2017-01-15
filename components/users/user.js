@@ -40,6 +40,10 @@ var User = function User(_socketId, _name) {
 
   this.getMarkerCount = function() {
     return markerCount || 0;
+  };
+
+  this.resetMarkerCount = function() {
+    markerCount = 0;
   }
 };
 

@@ -27,7 +27,7 @@ module.exports = {
     GameHandler.removeGameByPlayerId(socketId);
 
     if(enemySocket) {
-      UserHandler.setEnemyToUser(enemySocket.id, null);
+      UserHandler.resetUser(enemySocket.id);
       console.log("User disconnected from party");
       enemySocket.emit("user.left");
     }
