@@ -69,5 +69,11 @@ module.exports = {
   },
   setEnemyToUser: function(socketId, enemyId) {
     UserHandler.setEnemyToUser(socketId, enemyId);
+  },
+  increaseMarkerCount: function(userName) {
+    return UserHandler.increaseMarkerCount(userName);
+  },
+  getMarkerCount: function(userName) {
+    return UserHandler.getMarkerCount(userName);
   }
 };

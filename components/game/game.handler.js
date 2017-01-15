@@ -92,7 +92,7 @@ module.exports = {
     var game = getGameByPlayerId(playerId);
     if(game && game.getGameId() && game.getMaxFields()) {
       var tmp = game.getMaxFields();
-      console.log("Max x and y values.", tmp);
+      console.log("Max values.", tmp);
       return tmp;
     }
     return {
@@ -104,8 +104,10 @@ module.exports = {
     var game = getGameByPlayerId(playerId);
     if(game && game.getGameId()) {
       var fields = game.getMarkedFields();
+      var alreadyShootedFields = game.getShootedFields();
       var isMarked = isMarkedField(fields, mark);
-      if(isMarked) {
+      var isShooted = isShootedField(alreadyShootedFields, mark);
+      if(isMarked || isShooted) {
         return {
           error: Constants.ALREADY_MARKED,
           data: mark
@@ -114,7 +116,7 @@ module.exports = {
       mark.playerName = playerName;
       fields.push(mark);
       console.log("This field is now marked!", game.getMarkedFields());
-      return fields;
+      return mark;
     }
     return {
       error: Constants.GAME_NOT_FOUND,

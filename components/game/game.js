@@ -53,7 +53,8 @@ var Game = function Game(_player1Id, _player2Id, _config, _nextPlayerId) {
     if(config) {
       return {
         x: config.x,
-        y: config.y
+        y: config.y,
+        maxMarker: config.maxMarker
       }
     }
     return null;

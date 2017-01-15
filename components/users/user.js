@@ -2,6 +2,7 @@ var User = function User(_socketId, _name) {
   var name = _name;
   var socketId = _socketId;
   var enemySocketId = null;
+  var markerCount = 0;
 
   this.getName = function() {
     return name;
@@ -32,6 +33,14 @@ var User = function User(_socketId, _name) {
   this.setEnemy = function(_enemyId) {
     enemySocketId = _enemyId;
   };
+
+  this.increaseMarkerCount = function() {
+    return ++markerCount;
+  };
+
+  this.getMarkerCount = function() {
+    return markerCount || 0;
+  }
 };
 
 module.exports = User;

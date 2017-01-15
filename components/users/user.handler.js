@@ -81,5 +81,17 @@ module.exports = {
   getUserBySocketId: function(socketId) {
     var user = getUserBySocketId(socketId);
     return initUserDataForMatch(user);
+  },
+  increaseMarkerCount: function(userName) {
+    var user = getUserByName(userName);
+    if(user) {
+      return user.increaseMarkerCount();
+    }
+  },
+  getMarkerCount: function(userName) {
+    var user = getUserByName(userName);
+    if(user) {
+      return user.getMarkerCount();
+    }
   }
 };

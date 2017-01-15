@@ -105,21 +105,28 @@ io.on('connection', function(socket) {
       var player2Id = userLogic.getUserEnemyId(socket.id);
       var player2Socket = Util.getUserSocket(socket, io, player2Id);
       var maxFields = gameLogic.getMaxFields(socket.id);
+      var currentMarkedCount = userLogic.getMarkerCount(player1Name);
       if (maxFields && !maxFields.error) {
-        if(player2Socket) {
-          if(data && data.mark && data.mark.x >= 0 && data.mark.y >= 0 && maxFields && data.mark.x < maxFields.x && data.mark.y < maxFields.y) {
-            var result = gameLogic.markAsBomb(socket.id, data.mark, player1Name);
-            if (result && !result.error) {
-              socket.emit("game.marked", {marked: result});
-              player2Socket.emit("game.marked", {marked: result});
+        if(maxFields.maxMarker > currentMarkedCount) {
+          if (player2Socket) {
+            if (data && data.mark && data.mark.x >= 0 && data.mark.y >= 0 && maxFields && data.mark.x < maxFields.x && data.mark.y < maxFields.y) {
+              var result = gameLogic.markAsBomb(socket.id, data.mark, player1Name);
+              if (result && !result.error) {
+                var markerCount = userLogic.increaseMarkerCount(player1Name);
+                socket.emit("game.marked", {marked: result, markerCount: markerCount});
+                player2Socket.emit("game.marked", {marked: result, markerCount: markerCount});
+              }
+              else {
+                Util.manageError(socket, result);
+              }
             }
             else {
-              Util.manageError(socket, result);
+              Util.sendShortError(socket, "No mark data!", [data, maxFields]);
             }
           }
-          else {
-            Util.sendShortError(socket, "No mark data!", [data, maxFields]);
-          }
+        }
+        else {
+          Util.sendErrorWithLogData(socket, "game.warn", 406, "No more flag!", [currentMarkedCount, maxFields.maxMarker]);
         }
       }
       else {
