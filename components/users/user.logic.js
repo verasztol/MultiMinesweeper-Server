@@ -83,8 +83,9 @@ module.exports = {
     if(shotData && Array.isArray(shotData) && shotData[0]) {
       var userName = shotData[0].playerName;
       var score = 0;
+      console.log("shotData",shotData);
       for(var i = 0; i < shotData.length; i++) {
-        score += shotData[i].value || 0;
+        score += (shotData[i].value + 1) || 1;
       }
       return UserHandler.addScore(userName, score);
     }

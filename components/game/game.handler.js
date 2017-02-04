@@ -27,35 +27,99 @@ function isMarkedField(fields, target) {
   return false;
 }
 
-function checkShootedField(alreadyShootedFields, allFields, shot) {
+function calculateNextShotForRecursion(shot, neighborType) {
+  if(!shot) {
+    return null;
+  }
+  var newShot = {
+    value: shot.value
+  };
+
+  switch (neighborType) {
+    case 1:
+      newShot.x = shot.x + 1;
+      newShot.y = shot.y - 1;
+      break;
+    case 2:
+      newShot.x = shot.x;
+      newShot.y = shot.y - 1;
+      break;
+    case 3:
+      newShot.x = shot.x - 1;
+      newShot.y = shot.y - 1;
+      break;
+    case 4:
+      newShot.x = shot.x - 1;
+      newShot.y = shot.y;
+      break;
+    case 5:
+      newShot.x = shot.x - 1;
+      newShot.y = shot.y + 1;
+      break;
+    case 6:
+      newShot.x = shot.x;
+      newShot.y = shot.y + 1;
+      break;
+    case 7:
+      newShot.x = shot.x + 1;
+      newShot.y = shot.y + 1;
+      break;
+    case 8:
+      newShot.x = shot.x + 1;
+      newShot.y = shot.y;
+      break;
+    default:
+       return null;
+  }
+  return newShot;
+}
+
+function checkShootedField(alreadyShootedFields, allFields, shot, shootedFieldsForRecursion) {
   if(allFields && shot && allFields[shot.x] && allFields[shot.x][shot.y] >= Constants.BOMB) {
 
-    var isShooted = isShootedField(alreadyShootedFields, shot);
+    var shootedFields = shootedFieldsForRecursion || [];
+    var isShooted = isShootedField(alreadyShootedFields, shot) || isShootedFieldForRecursion(shootedFields, shot);
     if(isShooted) {
-      return {
-        error: Constants.ALREADY_SHOOTED,
-        data: shot
-      };
+      if(!shootedFieldsForRecursion) {
+        return {
+          error: Constants.ALREADY_SHOOTED,
+          data: shot
+        };
+      }
+      return null;
     }
 
-    var shootedFields = [];
     if(allFields[shot.x][shot.y] === Constants.BOMB) {
-      return Constants.END_GAME;
+      if(!shootedFieldsForRecursion) {
+        return Constants.END_GAME;
+      }
+      return null;
     }
-    // TODO if 0 then check neighbor
-    // else if(allFields[shot.x][shot.y] === 0){
-    //   // shootedFields = [];
-    // }
     else {
       shot.value = allFields[shot.x][shot.y];
       shootedFields.push(shot);
+
+      if(allFields[shot.x][shot.y] === 0) {
+        var neighborType = 1;
+        while (neighborType < 9) {
+          var newShot = calculateNextShotForRecursion(shot, neighborType);
+          var tmp = checkShootedField(alreadyShootedFields, allFields, newShot, shootedFields);
+          if (tmp) {
+            shootedFields = tmp;
+          }
+          neighborType++;
+        }
+      }
     }
     return shootedFields;
   }
-  return {
-    error: Constants.FIELD_ERROR,
-    data: [alreadyShootedFields, allFields, shot]
+  if(!shootedFieldsForRecursion) {
+    return {
+      error: Constants.FIELD_ERROR,
+      data: [alreadyShootedFields, allFields, shot]
+    }
   }
+  return null;
 }
 
 function isShootedField(fields, target) {
@@ -66,6 +130,16 @@ function isShootedField(fields, target) {
       if (field.x === target.x && field.y === target.y) {
         return true;
       }
+    }
+  }
+  return false;
+}
+
+function isShootedFieldForRecursion(fields, target) {
+  for(var i = 0; i < fields.length; i++) {
+    var field = fields[i];
+    if (field.x === target.x && field.y === target.y) {
+      return true;
     }
   }
   return false;
