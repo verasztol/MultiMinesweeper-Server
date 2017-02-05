@@ -34,7 +34,7 @@ io.on('connection', function(socket) {
     console.log("disconnect", socket.id);
     var player2Id = userLogic.getUserEnemyId(socket.id);
     var player2Socket = Util.getUserSocket(socket, io, player2Id);
-    authenticate.logout(socket.id, player2Socket);
+    authenticate.logout(socket, player2Socket);
   });
   socket.on('user.list', function() {
     console.log("get not playing users", socket.id);

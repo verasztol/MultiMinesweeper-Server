@@ -22,9 +22,14 @@ module.exports = {
       Util.sendShortError(socket, "User name is required!");
     }
   },
-  logout: function(socketId, enemySocket) {
-    UserHandler.removeUserBySocketId(socketId);
-    GameHandler.removeGameByPlayerId(socketId);
+  logout: function(socket, enemySocket) {
+    var user = UserHandler.getUserBySocketId(socket.id);
+    UserHandler.removeUserBySocketId(socket.id);
+    GameHandler.removeGameByPlayerId(socket.id);
+
+    if(user) {
+      socket.broadcast.emit('global.user.left', {userName: user.name});
+    }
 
     if(enemySocket) {
       UserHandler.resetUser(enemySocket.id);
