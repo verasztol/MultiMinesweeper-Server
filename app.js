@@ -148,12 +148,12 @@ io.on('connection', function(socket) {
             var result = gameLogic.shotField(socket.id, data.shot, player1Name);
             if (result && !result.error) {
               var player2Name = userLogic.getUserName(player2Id);
-              if(result === Constants.END_GAME) {
+              if(result.type === Constants.END_GAME) {
                 userLogic.resetUser(socket.id);
                 userLogic.resetUser(player2Id);
 
-                socket.emit("game.end", {winner: player2Name});
-                player2Socket.emit("game.end", {winner: player2Name});
+                socket.emit("game.end", {winner: player2Name, fields: result.fields});
+                player2Socket.emit("game.end", {winner: player2Name, fields: result.fields});
               }
               else {
                 var score = userLogic.calculateScore(result);

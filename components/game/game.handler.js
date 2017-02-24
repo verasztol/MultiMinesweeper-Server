@@ -211,7 +211,10 @@ module.exports = {
 
       if(shootedFields === Constants.END_GAME) {
         this.removeGameByPlayerId(playerId);
-        return Constants.END_GAME;
+        return {
+          type: Constants.END_GAME,
+          fields: game.getFields()
+        };
       }
 
       alreadyShootedFields.push(shootedFields);

@@ -57,6 +57,8 @@ function generateMines() {
       actualMine++;
     }
   }
+
+  console.log("mine count: ", actualMine);
 }
 
 function generateFields() {
