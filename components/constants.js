@@ -11,6 +11,33 @@ const FIELD_ERROR = "FIELD_ERROR";
 
 const END_GAME = "END_GAME";
 
+const EVENTS = {
+  authentication: "authentication",
+  connection: "connection",
+  disconnect: "disconnect",
+  gameEnd: "game.end",
+  gameMark: "game.mark",
+  gameMarked: "game.marked",
+  gameStart: "game.start",
+  gameStarted: "game.started",
+  gameShooted: "game.shooted",
+  gameShot: "game.shot",
+  gameWarn: "game.warn",
+  userAcceptedPlay: "user.acceptedPlay",
+  userAdded: "user.added",
+  userAnswerPlay: "user.answerPlay",
+  userDeclinedPlay: "user.declinedPlay",
+  userError: "user.error",
+  userLeft: "user.left",
+  userList: "user.list",
+  userListed: "user.listed",
+  userSelect: "user.select",
+  userWantPlay: "user.wantPlay",
+  globalUserAdded: "global.user.added",
+  globalUserLeft: "global.user.left"
+
+};
+
 module.exports = {
   BOMB: BOMB,
   GAME_NOT_FOUND: GAME_NOT_FOUND,
@@ -21,5 +48,6 @@ module.exports = {
   USER_NOT_FOUND: USER_NOT_FOUND,
   NAME_REQUIRED: NAME_REQUIRED,
   FIELD_ERROR: FIELD_ERROR,
-  END_GAME: END_GAME
+  END_GAME: END_GAME,
+  EVENTS: EVENTS
 };

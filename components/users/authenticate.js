@@ -2,6 +2,7 @@ var UserHandler = require('./user.handler.js');
 var GameHandler = require('../game/game.handler.js');
 var Util = require('../util.js');
 var logger = require('../../log');
+var Constants = require('../constants');
 
 module.exports = {
   login: function(socket, data) {
@@ -11,12 +12,12 @@ module.exports = {
       var user = UserHandler.addNewUser(socket.id, userName);
 
       if (user && user.publicData && user.logData) {
-        logger.info("user.added", user.logData);
-        socket.emit("user.added", user.publicData);
-        socket.broadcast.emit('global.user.added', {userName: userName});
+        logger.info("user added", user.logData);
+        socket.emit(Constants.EVENTS.userAdded, user.publicData);
+        socket.broadcast.emit(Constants.EVENTS.globalUserAdded, {userName: userName});
       }
       else {
-        Util.sendError(socket, "user.error", 422, "This name (" + userName + ") already exits!");
+        Util.sendError(socket, Constants.EVENTS.userError, 422, "This name (" + userName + ") already exits!");
       }
     }
     else {
@@ -29,19 +30,19 @@ module.exports = {
     GameHandler.removeGameByPlayerId(socket.id);
 
     if(user) {
-      socket.broadcast.emit('global.user.left', {userName: user.name});
+      socket.broadcast.emit(Constants.EVENTS.globalUserLeft, {userName: user.name});
     }
 
     if(enemySocket) {
       UserHandler.resetUser(enemySocket.id);
       logger.info("User disconnected from party", enemySocket.id);
-      enemySocket.emit("user.left");
+      enemySocket.emit(Constants.EVENTS.userLeft);
     }
   },
   isAuthenticated: function(socket) {
     var isAuthenticated = UserHandler.isAuthenticated(socket.id);
     if(!isAuthenticated) {
-      Util.sendError(socket, "user.error", 401, "You are not logged in!");
+      Util.sendError(socket, Constants.EVENTS.userError, 401, "You are not logged in!");
       socket.disconnect();
     }
     else {

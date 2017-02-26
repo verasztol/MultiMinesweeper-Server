@@ -21,7 +21,7 @@ module.exports = {
           };
           if(type === "challenge") {
             logger.info("match user", "want play", data, type, targetUser.logData, sourceUser.logData);
-            result.eventId = "user.wantPlay";
+            result.eventId = Constants.EVENTS.userWantPlay;
             result.data = {challengerName: sourceUser.name};
           }
           else if(answer && answer === "yes") {
@@ -29,12 +29,12 @@ module.exports = {
             UserHandler.setEnemyToUser(sourceUser.socketId, targetUser.socketId);
 
             logger.info("match user", "accepted play", data, type, targetUser.logData, sourceUser.logData);
-            result.eventId = "user.acceptedPlay";
+            result.eventId = Constants.EVENTS.userAcceptedPlay;
             result.data = {enemyName: sourceUser.name};
           }
           else {
             logger.info("match user", "declined play", data, type, targetUser.logData, sourceUser.logData);
-            result.eventId = "user.declinedPlay";
+            result.eventId = Constants.EVENTS.userDeclinedPlay;
             result.data = {enemyName: sourceUser.name};
           }
           return result;
@@ -84,7 +84,7 @@ module.exports = {
     if(shotData && Array.isArray(shotData) && shotData[0]) {
       var userName = shotData[0].playerName;
       var score = 0;
-      logger.info(userName, "shotData",shotData);
+      logger.info(userName, "shotData", shotData);
       for(var i = 0; i < shotData.length; i++) {
         score += (shotData[i].value + 1) || 1;
       }

@@ -22,25 +22,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-io.on('connection', function(socket) {
-  socket.on("authentication", function(data) {
+io.on(Constants.EVENTS.connection, function(socket) {
+  socket.on(Constants.EVENTS.authentication, function(data) {
     logger.info("authentication", socket.id, data);
     authenticate.login(socket, data);
   });
-  socket.on('disconnect', function(){
+  socket.on(Constants.EVENTS.disconnect, function(){
     logger.info("disconnect", socket.id);
     var player2Id = userLogic.getUserEnemyId(socket.id);
     var player2Socket = Util.getUserSocket(socket, io, player2Id);
     authenticate.logout(socket, player2Socket);
   });
-  socket.on('user.list', function() {
+  socket.on(Constants.EVENTS.userList, function() {
     logger.info("get not playing users", socket.id);
     if(authenticate.isAuthenticated(socket)) {
       var result = userLogic.getNotPlayingUsers(socket.id);
-      socket.emit("user.listed", result);
+      socket.emit(Constants.EVENTS.userListed, result);
     }
   });
-  socket.on('user.select', function(data) {
+  socket.on(Constants.EVENTS.userSelect, function(data) {
     logger.info("select opponent", socket.id, data);
     if(authenticate.isAuthenticated(socket)) {
       var result = userLogic.matchUsers(socket, data, "challenge");
@@ -57,7 +57,7 @@ io.on('connection', function(socket) {
       }
     }
   });
-  socket.on('user.answerPlay', function(data) {
+  socket.on(Constants.EVENTS.userAnswerPlay, function(data) {
     logger.info("answer to challenge", socket.id, data);
     if(authenticate.isAuthenticated(socket)) {
       var result = userLogic.matchUsers(socket, data, "answer");
@@ -74,7 +74,7 @@ io.on('connection', function(socket) {
       }
     }
   });
-  socket.on('game.start', function() {
+  socket.on(Constants.EVENTS.gameStart, function() {
     logger.info("game start", socket.id);
     if(authenticate.isAuthenticated(socket)) {
       var player2Id = userLogic.getUserEnemyId(socket.id);
@@ -85,8 +85,8 @@ io.on('connection', function(socket) {
           var nextPlayerName = userLogic.getUserName(result.nextPlayerId);
           var game = result.game;
 
-          socket.emit("game.started", {game: game, nextPlayerName: nextPlayerName});
-          player2Socket.emit("game.started", {game: game, nextPlayerName: nextPlayerName});
+          socket.emit(Constants.EVENTS.gameStarted, {game: game, nextPlayerName: nextPlayerName});
+          player2Socket.emit(Constants.EVENTS.gameStarted, {game: game, nextPlayerName: nextPlayerName});
         }
         else {
           Util.sendShortError(socket, "Can't create game!", result);
@@ -95,7 +95,7 @@ io.on('connection', function(socket) {
       }
     }
   });
-  socket.on('game.mark', function(data) {
+  socket.on(Constants.EVENTS.gameMark, function(data) {
     logger.info("mark as bomb", socket.id, data);
     if(authenticate.isAuthenticated(socket)) {
       var player1Name = userLogic.getUserName(socket.id);
@@ -110,8 +110,8 @@ io.on('connection', function(socket) {
               var result = gameLogic.markAsBomb(socket.id, data.mark, player1Name);
               if (result && !result.error) {
                 var markerCount = userLogic.increaseMarkerCount(player1Name);
-                socket.emit("game.marked", {marked: result, markerCount: markerCount});
-                player2Socket.emit("game.marked", {marked: result, markerCount: markerCount});
+                socket.emit(Constants.EVENTS.gameMarked, {marked: result, markerCount: markerCount});
+                player2Socket.emit(Constants.EVENTS.gameMarked, {marked: result, markerCount: markerCount});
               }
               else {
                 Util.manageError(socket, result);
@@ -123,7 +123,7 @@ io.on('connection', function(socket) {
           }
         }
         else {
-          Util.sendError(socket, "game.warn", 406, "No more flag!", [currentMarkedCount, maxFields.maxMarker]);
+          Util.sendError(socket, Constants.EVENTS.gameWarn, 406, "No more flag!", [currentMarkedCount, maxFields.maxMarker]);
         }
       }
       else {
@@ -132,7 +132,7 @@ io.on('connection', function(socket) {
 
     }
   });
-  socket.on('game.shot', function(data) {
+  socket.on(Constants.EVENTS.gameShot, function(data) {
     logger.info("check the field", socket.id, data);
     if(authenticate.isAuthenticated(socket)) {
       var player1Name = userLogic.getUserName(socket.id);
@@ -149,13 +149,13 @@ io.on('connection', function(socket) {
                 userLogic.resetUser(socket.id);
                 userLogic.resetUser(player2Id);
 
-                socket.emit("game.end", {winner: player2Name, fields: result.fields});
-                player2Socket.emit("game.end", {winner: player2Name, fields: result.fields});
+                socket.emit(Constants.EVENTS.gameEnd, {winner: player2Name, fields: result.fields});
+                player2Socket.emit(Constants.EVENTS.gameEnd, {winner: player2Name, fields: result.fields});
               }
               else {
                 var score = userLogic.calculateScore(result);
-                socket.emit("game.shooted", {shooted: result, nextPlayerName: player2Name, score: score});
-                player2Socket.emit("game.shooted", {shooted: result, nextPlayerName: player2Name, score: score});
+                socket.emit(Constants.EVENTS.gameShooted, {shooted: result, nextPlayerName: player2Name, score: score});
+                player2Socket.emit(Constants.EVENTS.gameShooted, {shooted: result, nextPlayerName: player2Name, score: score});
               }
             }
             else {
