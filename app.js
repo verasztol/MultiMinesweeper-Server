@@ -1,9 +1,9 @@
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var logger = require('./log.js');
 
 // routing import
 var index = require('./routes/index');
@@ -18,37 +18,34 @@ var gameLogic = require('./components/game/game.logic.js');
 var Util = require('./components/util.js');
 var Constants = require('./components/constants.js');
 
-// uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 io.on('connection', function(socket) {
   socket.on("authentication", function(data) {
-    console.log("authentication", socket.id, data);
+    logger.info("authentication", socket.id, data);
     authenticate.login(socket, data);
   });
   socket.on('disconnect', function(){
-    console.log("disconnect", socket.id);
+    logger.info("disconnect", socket.id);
     var player2Id = userLogic.getUserEnemyId(socket.id);
     var player2Socket = Util.getUserSocket(socket, io, player2Id);
     authenticate.logout(socket, player2Socket);
   });
   socket.on('user.list', function() {
-    console.log("get not playing users", socket.id);
+    logger.info("get not playing users", socket.id);
     if(authenticate.isAuthenticated(socket)) {
       var result = userLogic.getNotPlayingUsers(socket.id);
       socket.emit("user.listed", result);
     }
   });
   socket.on('user.select', function(data) {
-    console.log("select opponent", socket.id, data);
+    logger.info("select opponent", socket.id, data);
     if(authenticate.isAuthenticated(socket)) {
       var result = userLogic.matchUsers(socket, data, "challenge");
 
-      console.log("selected opponent", result);
+      logger.info("selected opponent", result);
       if (result && result.eventId && result.socketId && !result.error) {
         var targetUserSocket = Util.getUserSocket(socket, io, result.socketId);
         if (targetUserSocket) {
@@ -61,11 +58,11 @@ io.on('connection', function(socket) {
     }
   });
   socket.on('user.answerPlay', function(data) {
-    console.log("answer to challenge", socket.id, data);
+    logger.info("answer to challenge", socket.id, data);
     if(authenticate.isAuthenticated(socket)) {
       var result = userLogic.matchUsers(socket, data, "answer");
 
-      console.log("answered to challenge", result);
+      logger.info("answered to challenge", result);
       if (result && result.eventId && result.socketId && !result.error) {
         var targetUserSocket = Util.getUserSocket(socket, io, result.socketId);
         if (targetUserSocket) {
@@ -78,7 +75,7 @@ io.on('connection', function(socket) {
     }
   });
   socket.on('game.start', function() {
-    console.log("game start", socket.id);
+    logger.info("game start", socket.id);
     if(authenticate.isAuthenticated(socket)) {
       var player2Id = userLogic.getUserEnemyId(socket.id);
       var player2Socket = Util.getUserSocket(socket, io, player2Id);
@@ -99,7 +96,7 @@ io.on('connection', function(socket) {
     }
   });
   socket.on('game.mark', function(data) {
-    console.log("mark as bomb", socket.id, data);
+    logger.info("mark as bomb", socket.id, data);
     if(authenticate.isAuthenticated(socket)) {
       var player1Name = userLogic.getUserName(socket.id);
       var player2Id = userLogic.getUserEnemyId(socket.id);
@@ -126,7 +123,7 @@ io.on('connection', function(socket) {
           }
         }
         else {
-          Util.sendErrorWithLogData(socket, "game.warn", 406, "No more flag!", [currentMarkedCount, maxFields.maxMarker]);
+          Util.sendError(socket, "game.warn", 406, "No more flag!", [currentMarkedCount, maxFields.maxMarker]);
         }
       }
       else {
@@ -136,7 +133,7 @@ io.on('connection', function(socket) {
     }
   });
   socket.on('game.shot', function(data) {
-    console.log("check the field", socket.id, data);
+    logger.info("check the field", socket.id, data);
     if(authenticate.isAuthenticated(socket)) {
       var player1Name = userLogic.getUserName(socket.id);
       var player2Id = userLogic.getUserEnemyId(socket.id);
@@ -188,7 +185,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  console.log(err);
+  logger.error(err);
 
   // render the error page
   res.status(err.status || 500);
@@ -239,6 +236,7 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
+  logger.info('Listening on ' + bind);
   console.log('Listening on ' + bind);
 }
 

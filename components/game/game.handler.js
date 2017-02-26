@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var Game = require('./game');
 var Constants = require('../constants');
+var logger = require('../../log');
 
 var games = [];
 
@@ -148,7 +149,7 @@ function isShootedFieldForRecursion(fields, target) {
 module.exports = {
   addNewGame: function(player1Id, player2Id, config, nextPlayerId) {
     var newGame = new Game(player1Id, player2Id, config, nextPlayerId);
-    console.log("generated game", newGame.getDataForLog());
+    logger.info("generated game", newGame.getDataForLog());
     games.push(newGame);
     return newGame.getPublicData();
   },
@@ -166,7 +167,7 @@ module.exports = {
     var game = getGameByPlayerId(playerId);
     if(game && game.getGameId() && game.getMaxFields()) {
       var tmp = game.getMaxFields();
-      console.log("Max values.", tmp);
+      logger.info(game.getGameId(), "Max values:", tmp);
       return tmp;
     }
     return {
@@ -189,7 +190,7 @@ module.exports = {
       }
       mark.playerName = playerName;
       fields.push(mark);
-      console.log("This field is now marked!", game.getMarkedFields());
+      logger.info(game.getGameId(), "This field is now marked!", game.getMarkedFields());
       return mark;
     }
     return {
@@ -218,10 +219,10 @@ module.exports = {
       }
 
       alreadyShootedFields.push(shootedFields);
-      console.log("These fields are now shooted!", game.getShootedFields());
+      logger.info(game.getGameId(), "These fields are now shooted!", game.getShootedFields());
 
       game.switchNextPlayer();
-      console.log("Next player turn!", game.getCurrentPlayer());
+      logger.info(game.getGameId(), "Next player turn!", game.getCurrentPlayer());
 
       return shootedFields;
     }
@@ -236,7 +237,7 @@ module.exports = {
     if(game && game.getGameId()) {
       result = game.getCurrentPlayer() === playerId;
     }
-    console.log("is current player", playerId, result);
+    logger.info(game.getGameId(), "is current player", playerId, result);
     return result;
   }
 };

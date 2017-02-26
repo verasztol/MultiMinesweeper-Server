@@ -1,4 +1,5 @@
 var Constants = require('./constants');
+var logger = require('../log');
 
 module.exports = {
   sendError: function(socket, eventId, code, message, logData) {
@@ -7,19 +8,11 @@ module.exports = {
       msg: message
     };
 
-    if(logData) {
-      console.log(socket.id, error, logData);
-    }
-    else {
-      console.log(socket.id, error);
-    }
+    logger.warn(socket.id, eventId, error, logData);
     socket.emit(eventId, error);
   },
-  sendErrorWithLogData: function(socket, eventId, code, message, logData) {
-    this.sendError(socket, eventId, code, message, logData);
-  },
   sendShortError: function(socket, message, logData) {
-    this.sendErrorWithLogData(socket, "user.error", 400, message, logData);
+    this.sendError(socket, "user.error", 400, message, logData);
   },
   getUserSocket: function(socket, io, playerId) {
     var playerSocket = null;
@@ -37,28 +30,28 @@ module.exports = {
     }
     switch (result.error) {
       case Constants.ALREADY_MARKED:
-        this.sendErrorWithLogData(socket, "game.warn", 406, "This field is already marked!", result.data);
+        this.sendError(socket, "game.warn", 406, "This field is already marked!", result.data);
         break;
       case Constants.NOT_YOUR_TURN:
         this.sendError(socket, "game.warn", 406, "Not your turn!");
         break;
       case Constants.ALREADY_SHOOTED:
-        this.sendErrorWithLogData(socket, "game.warn", 406, "This field is already shotted!", result.data);
+        this.sendError(socket, "game.warn", 406, "This field is already shotted!", result.data);
         break;
       case Constants.ALREADY_PLAYING:
-        this.sendErrorWithLogData(socket, "game.warn", 406, "Already playing", result.data);
+        this.sendError(socket, "game.warn", 406, "Already playing", result.data);
         break;
       case Constants.USER_NOT_FOUND:
         this.sendShortError(socket, "User not found!", result.data);
         break;
       case Constants.NAME_REQUIRED:
-        this.sendErrorWithLogData(socket, "game.warn", 406, "User name is required!", result.data);
+        this.sendError(socket, "game.warn", 406, "User name is required!", result.data);
         break;
       case Constants.GAME_NOT_FOUND:
         this.sendShortError(socket, "Game not found!", result.data);
         break;
       case Constants.FIELD_ERROR:
-        this.sendErrorWithLogData(socket, "game.warn", 406, "The shooted field is was not valid!", result.data);
+        this.sendError(socket, "game.warn", 406, "The shooted field is was not valid!", result.data);
         break;
     }
   }

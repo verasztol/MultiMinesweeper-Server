@@ -1,6 +1,7 @@
 var UserHandler = require('./user.handler.js');
 var GameHandler = require('../game/game.handler.js');
 var Util = require('../util.js');
+var logger = require('../../log');
 
 module.exports = {
   login: function(socket, data) {
@@ -10,7 +11,7 @@ module.exports = {
       var user = UserHandler.addNewUser(socket.id, userName);
 
       if (user && user.publicData && user.logData) {
-        console.log("user.added", user.logData);
+        logger.info("user.added", user.logData);
         socket.emit("user.added", user.publicData);
         socket.broadcast.emit('global.user.added', {userName: userName});
       }
@@ -33,7 +34,7 @@ module.exports = {
 
     if(enemySocket) {
       UserHandler.resetUser(enemySocket.id);
-      console.log("User disconnected from party");
+      logger.info("User disconnected from party", enemySocket.id);
       enemySocket.emit("user.left");
     }
   },
@@ -44,7 +45,7 @@ module.exports = {
       socket.disconnect();
     }
     else {
-      console.log("Authenticated", socket.id);
+      logger.info("Authenticated", socket.id);
     }
     return isAuthenticated;
   }

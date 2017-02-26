@@ -1,5 +1,6 @@
 var GameHandler = require('./game.handler.js');
 var Constants = require('../constants.js');
+var logger = require('../../log');
 
 var config = {
   x: 16,
@@ -58,7 +59,7 @@ function generateMines() {
     }
   }
 
-  console.log("mine count: ", actualMine);
+  logger.info("mine count: ", actualMine);
 }
 
 function generateFields() {
@@ -87,7 +88,7 @@ module.exports = {
     }
 
     var game = GameHandler.addNewGame(player1Socket.id, player2Socket.id, config, nextPlayerId);
-    console.log("init game", game, "nextPlayerId: " + nextPlayerId);
+    logger.info("init game", game, "nextPlayerId: " + nextPlayerId);
 
     return {
       nextPlayerId: nextPlayerId,

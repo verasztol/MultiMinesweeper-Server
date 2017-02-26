@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var logger = require('../../log');
 
 var Game = function Game(_player1Id, _player2Id, _config, _nextPlayerId) {
   var gameId = _player1Id + _player2Id + Date.now();

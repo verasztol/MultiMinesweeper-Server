@@ -1,3 +1,5 @@
+var logger = require('../../log');
+
 var User = function User(_socketId, _name) {
   var name = _name;
   var socketId = _socketId;

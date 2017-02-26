@@ -1,5 +1,6 @@
 var UserHandler = require('./user.handler.js');
 var Constants = require('../constants.js');
+var logger = require('../../log');
 
 module.exports = {
   getNotPlayingUsers: function(playerId) {
@@ -19,7 +20,7 @@ module.exports = {
             socketId: targetUser.socketId
           };
           if(type === "challenge") {
-            console.log("match user", "want play", data, type, targetUser.logData, sourceUser.logData);
+            logger.info("match user", "want play", data, type, targetUser.logData, sourceUser.logData);
             result.eventId = "user.wantPlay";
             result.data = {challengerName: sourceUser.name};
           }
@@ -27,12 +28,12 @@ module.exports = {
             UserHandler.setEnemyToUser(targetUser.socketId, sourceUser.socketId);
             UserHandler.setEnemyToUser(sourceUser.socketId, targetUser.socketId);
 
-            console.log("match user", "accepted play", data, type, targetUser.logData, sourceUser.logData);
+            logger.info("match user", "accepted play", data, type, targetUser.logData, sourceUser.logData);
             result.eventId = "user.acceptedPlay";
             result.data = {enemyName: sourceUser.name};
           }
           else {
-            console.log("match user", "declined play", data, type, targetUser.logData, sourceUser.logData);
+            logger.info("match user", "declined play", data, type, targetUser.logData, sourceUser.logData);
             result.eventId = "user.declinedPlay";
             result.data = {enemyName: sourceUser.name};
           }
@@ -83,7 +84,7 @@ module.exports = {
     if(shotData && Array.isArray(shotData) && shotData[0]) {
       var userName = shotData[0].playerName;
       var score = 0;
-      console.log("shotData",shotData);
+      logger.info(userName, "shotData",shotData);
       for(var i = 0; i < shotData.length; i++) {
         score += (shotData[i].value + 1) || 1;
       }

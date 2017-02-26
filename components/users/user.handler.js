@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var User = require('./user');
+var logger = require('../../log');
 
 var users = [];
 
@@ -58,7 +59,7 @@ module.exports = {
       }
     });
 
-    console.log("list not playing users", tmp);
+    logger.info(socketId, "list not playing users", tmp);
     return tmp;
   },
   isAuthenticated: function(socketId) {
