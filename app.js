@@ -149,8 +149,8 @@ io.on(Constants.EVENTS.connection, function(socket) {
                 userLogic.resetUser(socket.id);
                 userLogic.resetUser(player2Id);
 
-                socket.emit(Constants.EVENTS.gameEnd, {winner: player2Name, fields: result.fields});
-                player2Socket.emit(Constants.EVENTS.gameEnd, {winner: player2Name, fields: result.fields});
+                socket.emit(Constants.EVENTS.gameEnd, {winner: player2Name, fields: result.fields, type: Constants.GAME_END_TYPES.bombFound});
+                player2Socket.emit(Constants.EVENTS.gameEnd, {winner: player2Name, fields: result.fields, type: Constants.GAME_END_TYPES.bombFound});
               }
               else {
                 var score = userLogic.calculateScore(result);

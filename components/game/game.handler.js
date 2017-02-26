@@ -239,5 +239,12 @@ module.exports = {
     }
     logger.info(game.getGameId(), "is current player", playerId, result);
     return result;
+  },
+  getFields: function(playerId) {
+    var game = getGameByPlayerId(playerId);
+    if(game) {
+      return game.getFields();
+    }
+    return null;
   }
 };

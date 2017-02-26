@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c5cf5300-a683-4095-bb8e-93f431113684" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/components/constants.js" afterPath="$PROJECT_DIR$/components/constants.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/components/game/game.handler.js" afterPath="$PROJECT_DIR$/components/game/game.handler.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/components/users/authenticate.js" afterPath="$PROJECT_DIR$/components/users/authenticate.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/components/users/user.logic.js" afterPath="$PROJECT_DIR$/components/users/user.logic.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/components/util.js" afterPath="$PROJECT_DIR$/components/util.js" />
     </list>
     <ignored path="server.iws" />
@@ -29,31 +30,33 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="constants.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/components/constants.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-81">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="218">
-              <caret line="151" column="45" lean-forward="false" selection-start-line="151" selection-start-column="28" selection-end-line="151" selection-end-column="45" />
+            <state relative-caret-position="254">
+              <caret line="117" column="15" lean-forward="false" selection-start-line="117" selection-start-column="15" selection-end-line="117" selection-end-column="15" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="game.handler.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/components/game/game.handler.js">
+      <file leaf-file-name="game.logic.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/components/game/game.logic.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="216" column="34" lean-forward="false" selection-start-line="216" selection-start-column="34" selection-end-line="216" selection-end-column="34" />
+            <state relative-caret-position="320">
+              <caret line="104" column="5" lean-forward="false" selection-start-line="104" selection-start-column="5" selection-end-line="104" selection-end-column="5" />
+              <folding>
+                <element signature="n#!!block;n#setField#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="all-logs.log" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/log/all-logs.log">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="459">
+              <caret line="1534" column="27" lean-forward="false" selection-start-line="1529" selection-start-column="9" selection-end-line="1534" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -127,17 +130,17 @@
         <option value="$PROJECT_DIR$/log.js" />
         <option value="$PROJECT_DIR$/components/users/user.js" />
         <option value="$PROJECT_DIR$/components/users/user.handler.js" />
-        <option value="$PROJECT_DIR$/components/game/game.logic.js" />
         <option value="$PROJECT_DIR$/components/game/game.js" />
-        <option value="$PROJECT_DIR$/components/game/game.handler.js" />
         <option value="$PROJECT_DIR$/bin/www" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/log/all-logs.log" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/components/users/user.logic.js" />
-        <option value="$PROJECT_DIR$/components/util.js" />
         <option value="$PROJECT_DIR$/components/constants.js" />
+        <option value="$PROJECT_DIR$/components/game/game.handler.js" />
         <option value="$PROJECT_DIR$/components/users/authenticate.js" />
+        <option value="$PROJECT_DIR$/components/util.js" />
+        <option value="$PROJECT_DIR$/log/all-logs.log" />
+        <option value="$PROJECT_DIR$/components/game/game.logic.js" />
+        <option value="$PROJECT_DIR$/app.js" />
       </list>
     </option>
   </component>
@@ -459,12 +462,12 @@
       <workItem from="1487511508374" duration="634000" />
       <workItem from="1487969489626" duration="3088000" />
       <workItem from="1488040316939" duration="19367000" />
-      <workItem from="1488115160548" duration="5537000" />
+      <workItem from="1488115160548" duration="12774000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="178190000" />
+    <option name="totallyTimeSpent" value="185427000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1928" y="-319" width="1936" height="1066" extended-state="6" />
@@ -702,7 +705,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/log/all-logs1.log" />
     <entry file="file://$PROJECT_DIR$/log/all-logs2.log" />
-    <entry file="file://$PROJECT_DIR$/log/exceptions.log" />
     <entry file="file://$PROJECT_DIR$/log.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
@@ -734,34 +736,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/log/all-logs.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="25" column="125" lean-forward="false" selection-start-line="25" selection-start-column="125" selection-end-line="25" selection-end-column="125" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/components/users/user.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-462">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/components/util.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="592">
-          <caret line="53" column="81" lean-forward="false" selection-start-line="53" selection-start-column="81" selection-end-line="53" selection-end-column="81" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/components/users/authenticate.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="748">
-          <caret line="44" column="55" lean-forward="false" selection-start-line="44" selection-start-column="55" selection-end-line="44" selection-end-column="55" />
           <folding />
         </state>
       </provider>
@@ -774,24 +752,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/components/game/game.logic.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-122">
-          <caret line="2" column="34" lean-forward="false" selection-start-line="2" selection-start-column="34" selection-end-line="2" selection-end-column="34" />
-          <folding>
-            <element signature="n#!!block;n#setField#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/components/users/user.logic.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="31" column="46" lean-forward="false" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/components/game/game.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1159">
@@ -800,26 +760,76 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
+    <entry file="file://$PROJECT_DIR$/components/constants.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="218">
-          <caret line="151" column="45" lean-forward="false" selection-start-line="151" selection-start-column="28" selection-end-line="151" selection-end-column="45" />
+        <state relative-caret-position="269">
+          <caret line="39" column="0" lean-forward="false" selection-start-line="39" selection-start-column="0" selection-end-line="42" selection-end-column="2" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/components/users/user.logic.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-187">
+          <caret line="31" column="46" lean-forward="false" selection-start-line="31" selection-start-column="29" selection-end-line="31" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/log/exceptions.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/components/game/game.handler.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="216" column="34" lean-forward="false" selection-start-line="216" selection-start-column="34" selection-end-line="216" selection-end-column="34" />
+        <state relative-caret-position="684">
+          <caret line="242" column="2" lean-forward="false" selection-start-line="242" selection-start-column="2" selection-end-line="242" selection-end-column="2" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/components/constants.js">
+    <entry file="file://$PROJECT_DIR$/components/users/authenticate.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-81">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="16" />
+        <state relative-caret-position="272">
+          <caret line="28" column="32" lean-forward="true" selection-start-line="28" selection-start-column="32" selection-end-line="28" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/components/util.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="34" column="34" lean-forward="false" selection-start-line="34" selection-start-column="21" selection-end-line="34" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/log/all-logs.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="459">
+          <caret line="1534" column="27" lean-forward="false" selection-start-line="1529" selection-start-column="9" selection-end-line="1534" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/components/game/game.logic.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="104" column="5" lean-forward="false" selection-start-line="104" selection-start-column="5" selection-end-line="104" selection-end-column="5" />
+          <folding>
+            <element signature="n#!!block;n#setField#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="254">
+          <caret line="117" column="15" lean-forward="false" selection-start-line="117" selection-start-column="15" selection-end-line="117" selection-end-column="15" />
           <folding />
         </state>
       </provider>

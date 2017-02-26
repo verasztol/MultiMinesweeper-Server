@@ -26,6 +26,7 @@ module.exports = {
   },
   logout: function(socket, enemySocket) {
     var user = UserHandler.getUserBySocketId(socket.id);
+    var fields = GameHandler.getFields(socket.id);
     UserHandler.removeUserBySocketId(socket.id);
     GameHandler.removeGameByPlayerId(socket.id);
 
@@ -34,9 +35,16 @@ module.exports = {
     }
 
     if(enemySocket) {
+      var player2 = UserHandler.getUserBySocketId(enemySocket.id);
       UserHandler.resetUser(enemySocket.id);
-      logger.info("User disconnected from party", enemySocket.id);
-      enemySocket.emit(Constants.EVENTS.userLeft);
+      logger.info("User disconnected from party", enemySocket.id, player2);
+      if(player2) {
+        enemySocket.emit(Constants.EVENTS.gameEnd, {
+          winner: player2.name,
+          fields: fields,
+          type: Constants.GAME_END_TYPES.userLeft
+        });
+      }
     }
   },
   isAuthenticated: function(socket) {

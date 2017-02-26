@@ -35,7 +35,11 @@ const EVENTS = {
   userWantPlay: "user.wantPlay",
   globalUserAdded: "global.user.added",
   globalUserLeft: "global.user.left"
+};
 
+const GAME_END_TYPES = {
+  bombFound: "bombFound",
+  userLeft: "userLeft"
 };
 
 module.exports = {
@@ -49,5 +53,6 @@ module.exports = {
   NAME_REQUIRED: NAME_REQUIRED,
   FIELD_ERROR: FIELD_ERROR,
   END_GAME: END_GAME,
-  EVENTS: EVENTS
+  EVENTS: EVENTS,
+  GAME_END_TYPES: GAME_END_TYPES
 };

@@ -5,7 +5,7 @@ module.exports = {
   sendError: function(socket, eventId, code, message, logData) {
     var error = {
       code: code,
-      msg: message
+      message: message
     };
 
     logger.warn(socket.id, eventId, error, logData);
@@ -36,7 +36,7 @@ module.exports = {
         this.sendError(socket, Constants.EVENTS.gameWarn, 406, "Not your turn!");
         break;
       case Constants.ALREADY_SHOOTED:
-        this.sendError(socket, Constants.EVENTS.gameWarn, 406, "This field is already shotted!", result.data);
+        this.sendError(socket, Constants.EVENTS.gameWarn, 406, "This field is already shooted!", result.data);
         break;
       case Constants.ALREADY_PLAYING:
         this.sendError(socket, Constants.EVENTS.gameWarn, 406, "Already playing", result.data);
