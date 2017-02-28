@@ -6,6 +6,7 @@ var User = function User(_socketId, _name) {
   var enemySocketId = null;
   var markerCount = 0;
   var score = 0;
+  var bombWasTolerated = false;
 
   this.getName = function() {
     return name;
@@ -55,6 +56,14 @@ var User = function User(_socketId, _name) {
 
   this.setScore = function(s) {
     score = s;
+  };
+
+  this.setBombWasTolerated = function(t) {
+    bombWasTolerated = t;
+  };
+
+  this.getBombWasTolerated = function() {
+    return bombWasTolerated;
   };
 };
 

@@ -7,7 +7,8 @@ var config = {
   y: 16,
   fields: [],
   mineCount: 51,
-  maxMarker: Math.ceil(51 / 2)
+  maxMarker: Math.ceil(51 / 2),
+  bombTolerateScore: 5000
 };
 
 function setField(x, y) {
@@ -107,10 +108,10 @@ module.exports = {
       error: Constants.NOT_YOUR_TURN
     };
   },
-  shotField: function(playerId, shot, playerName) {
+  shotField: function(playerId, shot, playerName, wasBombTolerated, playerScore) {
     var isCurrentPlayer = GameHandler.isCurrentPlayer(playerId);
     if (isCurrentPlayer) {
-      return GameHandler.addShootedField(playerId, shot, playerName);
+      return GameHandler.addShootedField(playerId, shot, playerName, wasBombTolerated, playerScore);
     }
     return {
       error: Constants.NOT_YOUR_TURN

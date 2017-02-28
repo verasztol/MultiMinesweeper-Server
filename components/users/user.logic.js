@@ -90,5 +90,14 @@ module.exports = {
       }
       return UserHandler.addScore(userName, score);
     }
+  },
+  getBombWasTolerated: function(socketId) {
+    return UserHandler.getBombWasTolerated(socketId);
+  },
+  getPlayerScore: function(socketId) {
+    return UserHandler.getPlayerScore(socketId);
+  },
+  setBombWasTolerated: function(socketId) {
+    return UserHandler.setBombWasTolerated(socketId);
   }
 };

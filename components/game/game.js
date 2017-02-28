@@ -33,6 +33,13 @@ var Game = function Game(_player1Id, _player2Id, _config, _nextPlayerId) {
     return null;
   };
 
+  this.getBombTolerateScore = function() {
+    if(config) {
+      return config.bombTolerateScore;
+    }
+    return 0;
+  };
+
   this.getCurrentPlayer = function() {
     return nextPlayerId;
   };
@@ -46,7 +53,8 @@ var Game = function Game(_player1Id, _player2Id, _config, _nextPlayerId) {
       width: config.x,
       height: config.y,
       mineCount: config.mineCount,
-      maxMarker: config.maxMarker
+      maxMarker: config.maxMarker,
+      bombTolerateScore: config.bombTolerateScore
     }
   };
 
@@ -95,7 +103,8 @@ var Game = function Game(_player1Id, _player2Id, _config, _nextPlayerId) {
       nextPlayerId: nextPlayerId,
       markedFields: markedFields,
       maxMarker: config.maxMarker,
-      shootedFields: shootedFields
+      shootedFields: shootedFields,
+      bombTolerateScore: config.bombTolerateScore
     }
   };
 };

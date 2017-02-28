@@ -137,12 +137,15 @@ io.on(Constants.EVENTS.connection, function(socket) {
     if(authenticate.isAuthenticated(socket)) {
       var player1Name = userLogic.getUserName(socket.id);
       var player2Id = userLogic.getUserEnemyId(socket.id);
+      var wasBombTolerated = userLogic.getBombWasTolerated(socket.id);
+      var player1Score = userLogic.getPlayerScore(socket.id);
       var player2Socket = Util.getUserSocket(socket, io, player2Id);
       var maxFields = gameLogic.getMaxFields(socket.id);
+
       if (maxFields && !maxFields.error) {
         if(player2Socket) {
           if(data && data.shot && data.shot.x >= 0 && data.shot.y >= 0 && maxFields && data.shot.x < maxFields.x && data.shot.y < maxFields.y) {
-            var result = gameLogic.shotField(socket.id, data.shot, player1Name);
+            var result = gameLogic.shotField(socket.id, data.shot, player1Name, wasBombTolerated, player1Score);
             if (result && !result.error) {
               var player2Name = userLogic.getUserName(player2Id);
               if(result.type === Constants.END_GAME) {
@@ -151,6 +154,13 @@ io.on(Constants.EVENTS.connection, function(socket) {
 
                 socket.emit(Constants.EVENTS.gameEnd, {winner: player2Name, fields: result.fields, type: Constants.GAME_END_TYPES.bombFound});
                 player2Socket.emit(Constants.EVENTS.gameEnd, {winner: player2Name, fields: result.fields, type: Constants.GAME_END_TYPES.bombFound});
+              }
+              else if(result.type === Constants.WAS_TOLERATED_BOMB) {
+                userLogic.setBombWasTolerated(socket.id);
+                var score = userLogic.calculateScore(result.data);
+                socket.emit(Constants.EVENTS.gameShooted, {shooted: result.data, nextPlayerName: player2Name, score: score});
+                player2Socket.emit(Constants.EVENTS.gameShooted, {shooted: result.data, nextPlayerName: player2Name, score: score});
+                Util.sendError(socket, Constants.EVENTS.gameWarn, 405, "This is your first bomb and your score is under " + result.bombToleratedScore + ", so you get an extra life!", [result]);
               }
               else {
                 var score = userLogic.calculateScore(result);

@@ -75,7 +75,7 @@ function calculateNextShotForRecursion(shot, neighborType) {
   return newShot;
 }
 
-function checkShootedField(alreadyShootedFields, allFields, shot, shootedFieldsForRecursion) {
+function checkShootedField(alreadyShootedFields, allFields, shot, bombToleratedScore, wasBombTolerated, playerScore, shootedFieldsForRecursion) {
   if(allFields && shot && allFields[shot.x] && allFields[shot.x][shot.y] >= Constants.BOMB) {
 
     var shootedFields = shootedFieldsForRecursion || [];
@@ -92,6 +92,15 @@ function checkShootedField(alreadyShootedFields, allFields, shot, shootedFieldsF
 
     if(allFields[shot.x][shot.y] === Constants.BOMB) {
       if(!shootedFieldsForRecursion) {
+        if(!wasBombTolerated && playerScore <= bombToleratedScore) {
+          shot.value = Constants.TOLERATED_BOMB;
+          shootedFields.push(shot);
+          return {
+            type: Constants.WAS_TOLERATED_BOMB,
+            bombToleratedScore: bombToleratedScore,
+            data: shootedFields
+          }
+        }
         return Constants.END_GAME;
       }
       return null;
@@ -104,7 +113,7 @@ function checkShootedField(alreadyShootedFields, allFields, shot, shootedFieldsF
         var neighborType = 1;
         while (neighborType < 9) {
           var newShot = calculateNextShotForRecursion(shot, neighborType);
-          var tmp = checkShootedField(alreadyShootedFields, allFields, newShot, shootedFields);
+          var tmp = checkShootedField(alreadyShootedFields, allFields, newShot, bombToleratedScore, wasBombTolerated, playerScore, shootedFields);
           if (tmp) {
             shootedFields = tmp;
           }
@@ -198,14 +207,14 @@ module.exports = {
       data: [playerId, playerName]
     };
   },
-  addShootedField: function(playerId, shot, playerName) {
+  addShootedField: function(playerId, shot, playerName, wasBombTolerated, playerScore) {
     var game = getGameByPlayerId(playerId);
     if(game && game.getGameId() && game.getFields()) {
       var alreadyShootedFields = game.getShootedFields();
 
       shot.playerName = playerName;
 
-      var shootedFields = checkShootedField(alreadyShootedFields, game.getFields(), shot);
+      var shootedFields = checkShootedField(alreadyShootedFields, game.getFields(), shot, game.getBombTolerateScore(), wasBombTolerated, playerScore);
       if(shootedFields.error) {
         return shootedFields;
       }
@@ -217,8 +226,13 @@ module.exports = {
           fields: game.getFields()
         };
       }
+      else if(shootedFields.type === Constants.WAS_TOLERATED_BOMB) {
+        alreadyShootedFields.push(shootedFields.data);
+      }
+      else {
+        alreadyShootedFields.push(shootedFields);
+      }
 
-      alreadyShootedFields.push(shootedFields);
       logger.info(game.getGameId(), "These fields are now shooted!", game.getShootedFields());
 
       game.switchNextPlayer();

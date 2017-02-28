@@ -101,6 +101,7 @@ module.exports = {
       user.resetMarkerCount();
       user.setEnemy(null);
       user.setScore(0);
+      user.setBombWasTolerated(false);
     }
   },
   addScore: function(userName, score) {
@@ -109,6 +110,20 @@ module.exports = {
       var tmp = score * 1000;
       user.setScore(tmp + user.getScore());
       return user.getScore();
+    }
+  },
+  getBombWasTolerated: function(socketId) {
+    var user = getUserBySocketId(socketId);
+    return (user) ? user.getBombWasTolerated() : true;
+  },
+  getPlayerScore: function(socketId) {
+    var user = getUserBySocketId(socketId);
+    return (user) ? user.getScore() : 0;
+  },
+  setBombWasTolerated: function(socketId) {
+    var user = getUserBySocketId(socketId);
+    if(user) {
+      user.setBombWasTolerated(true);
     }
   }
 };
