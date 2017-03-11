@@ -7,7 +7,8 @@ var config = {
   y: 16,
   fields: [],
   mineCount: 51, // min 3!
-  maxMarker: Math.ceil(51 / 2)
+  maxMarker: Math.ceil(51 / 2),
+  bombTolerateScore: 5000
 };
 
 function setField(x, y) {
