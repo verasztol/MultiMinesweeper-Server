@@ -3,12 +3,12 @@ var Constants = require('../constants.js');
 var logger = require('../../log');
 
 var config = {
-  x: 16,
-  y: 16,
+  x: 3,
+  y: 3,
   fields: [],
-  mineCount: 51,
+  mineCount: 1, // min 3!
   maxMarker: Math.ceil(51 / 2),
-  bombTolerateScore: 5000
+  bombTolerateScore: -1
 };
 
 function setField(x, y) {
@@ -60,7 +60,7 @@ function generateMines() {
     }
   }
 
-  logger.info("mine count: ", actualMine);
+  logger.info("generateMines", "mine count: ", actualMine);
 }
 
 function generateFields() {
@@ -82,6 +82,7 @@ function generateFields() {
 
 module.exports = {
   initGame: function(player1Socket, player2Socket) {
+    this.removeGameByPlayerId(player1Socket.id);
     generateFields();
     var nextPlayerId = player1Socket.id;
     if(Math.random() >= 0.5) {
@@ -116,5 +117,35 @@ module.exports = {
     return {
       error: Constants.NOT_YOUR_TURN
     };
+  },
+  isAllFieldShooted: function(playerId) {
+    return GameHandler.isAllFieldShooted(playerId);
+  },
+  removeGameByPlayerId: function(playerId) {
+    GameHandler.removeGameByPlayerId(playerId);
+  },
+  getScoreForFlags: function(playerId, playerName) {
+    var markList = GameHandler.getMarkedFields(playerId);
+    var fields = GameHandler.getFields(playerId);
+    var score = 0;
+    if(markList && Array.isArray(markList) && fields && Array.isArray(fields)) {
+      markList = markList.filter(function(item) {
+        return item.playerName === playerName;
+      });
+
+      for(var i = 0; i < markList.length; i++) {
+        var field = fields[markList[i].x][markList[i].y];
+        if(field === Constants.BOMB) {
+          score += Constants.FLAG_MULTIPLIER;
+        }
+        else {
+          score -= Constants.FLAG_MULTIPLIER * 2;
+        }
+      }
+    }
+    else {
+      logger.warn("getScoreForFlags", "mark list or fields was falsy", markList, fields);
+    }
+    return score;
   }
 };

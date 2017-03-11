@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var User = require('./user');
 var logger = require('../../log');
+var Constants = require('../constants');
 
 var users = [];
 
@@ -25,6 +26,7 @@ function initUserDataForMatch(user) {
       name: user.getName()
     }
   }
+  logger.warn("initUserDataForMatch", "User not found!");
   return null;
 }
 
@@ -59,7 +61,7 @@ module.exports = {
       }
     });
 
-    logger.info(socketId, "list not playing users", tmp);
+    logger.info("getNotPlayingUsers", socketId, "list not playing users", tmp);
     return tmp;
   },
   isAuthenticated: function(socketId) {
@@ -78,6 +80,9 @@ module.exports = {
     if(user) {
       user.setEnemy(enemyId);
     }
+    else {
+      logger.warn("setEnemyToUser", playerId, "User not found! Enemy id: " + enemyId);
+    }
   },
   getUserBySocketId: function(socketId) {
     var user = getUserBySocketId(socketId);
@@ -88,12 +93,21 @@ module.exports = {
     if(user) {
       return user.increaseMarkerCount();
     }
+    logger.warn("increaseMarkerCount", "User not found!", userName);
+  },
+  decreaseMarkerCount: function(userName) {
+    var user = getUserByName(userName);
+    if(user) {
+      return user.decreaseMarkerCount();
+    }
+    logger.warn("decreaseMarkerCount", "User not found!", userName);
   },
   getMarkerCount: function(userName) {
     var user = getUserByName(userName);
     if(user) {
       return user.getMarkerCount();
     }
+    logger.warn("getMarkerCount", "User not found!", userName);
   },
   resetUser: function(socketId) {
     var user = getUserBySocketId(socketId);
@@ -103,14 +117,16 @@ module.exports = {
       user.setScore(0);
       user.setBombWasTolerated(false);
     }
+    logger.warn("resetUser", "User not found!", socketId);
   },
   addScore: function(userName, score) {
     var user = getUserByName(userName);
     if(user) {
-      var tmp = score * 1000;
+      var tmp = score * Constants.SCORE_MULTIPLIER;
       user.setScore(tmp + user.getScore());
       return user.getScore();
     }
+    logger.warn("addScore", "User not found!", userName, score);
   },
   getBombWasTolerated: function(socketId) {
     var user = getUserBySocketId(socketId);
@@ -124,6 +140,9 @@ module.exports = {
     var user = getUserBySocketId(socketId);
     if(user) {
       user.setBombWasTolerated(true);
+    }
+    else {
+      logger.warn("setBombWasTolerated", "User not found!", socketId);
     }
   }
 };

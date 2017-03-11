@@ -42,6 +42,13 @@ var User = function User(_socketId, _name) {
     return ++markerCount;
   };
 
+  this.decreaseMarkerCount = function() {
+    if(markerCount === 0) {
+      return markerCount;
+    }
+    return --markerCount;
+  };
+
   this.getMarkerCount = function() {
     return markerCount || 0;
   };

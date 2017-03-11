@@ -13,6 +13,9 @@ const FIELD_ERROR = "FIELD_ERROR";
 
 const END_GAME = "END_GAME";
 
+const SCORE_MULTIPLIER = 1000;
+const FLAG_MULTIPLIER = 5000;
+
 const EVENTS = {
   authentication: "authentication",
   connection: "connection",
@@ -41,7 +44,8 @@ const EVENTS = {
 
 const GAME_END_TYPES = {
   bombFound: "bombFound",
-  userLeft: "userLeft"
+  userLeft: "userLeft",
+  allFieldChecked: "allFieldChecked"
 };
 
 module.exports = {
@@ -58,5 +62,7 @@ module.exports = {
   FIELD_ERROR: FIELD_ERROR,
   END_GAME: END_GAME,
   EVENTS: EVENTS,
-  GAME_END_TYPES: GAME_END_TYPES
+  GAME_END_TYPES: GAME_END_TYPES,
+  SCORE_MULTIPLIER: SCORE_MULTIPLIER,
+  FLAG_MULTIPLIER: FLAG_MULTIPLIER
 };

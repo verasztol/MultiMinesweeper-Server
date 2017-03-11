@@ -106,10 +106,16 @@ io.on(Constants.EVENTS.connection, function(socket) {
       if (maxFields && !maxFields.error) {
         if(maxFields.maxMarker > currentMarkedCount) {
           if (player2Socket) {
-            if (data && data.mark && data.mark.x >= 0 && data.mark.y >= 0 && maxFields && data.mark.x < maxFields.x && data.mark.y < maxFields.y) {
+            if (data && data.mark && data.mark.x >= 0 && data.mark.y >= 0 && data.mark.x < maxFields.x && data.mark.y < maxFields.y) {
               var result = gameLogic.markAsBomb(socket.id, data.mark, player1Name);
               if (result && !result.error) {
-                var markerCount = userLogic.increaseMarkerCount(player1Name);
+                var markerCount = 0;
+                if(result.type === "unmark") {
+                  markerCount = userLogic.decreaseMarkerCount(player1Name);
+                }
+                else {
+                  markerCount = userLogic.increaseMarkerCount(player1Name);
+                }
                 socket.emit(Constants.EVENTS.gameMarked, {marked: result, markerCount: markerCount});
                 player2Socket.emit(Constants.EVENTS.gameMarked, {marked: result, markerCount: markerCount});
               }
@@ -155,17 +161,64 @@ io.on(Constants.EVENTS.connection, function(socket) {
                 socket.emit(Constants.EVENTS.gameEnd, {winner: player2Name, fields: result.fields, type: Constants.GAME_END_TYPES.bombFound});
                 player2Socket.emit(Constants.EVENTS.gameEnd, {winner: player2Name, fields: result.fields, type: Constants.GAME_END_TYPES.bombFound});
               }
-              else if(result.type === Constants.WAS_TOLERATED_BOMB) {
-                userLogic.setBombWasTolerated(socket.id);
-                var score = userLogic.calculateScore(result.data);
-                socket.emit(Constants.EVENTS.gameShooted, {shooted: result.data, nextPlayerName: player2Name, score: score});
-                player2Socket.emit(Constants.EVENTS.gameShooted, {shooted: result.data, nextPlayerName: player2Name, score: score});
-                Util.sendError(socket, Constants.EVENTS.gameWarn, 405, "This is your first bomb and your score is under " + result.bombToleratedScore + ", so you get an extra life!", [result]);
-              }
               else {
-                var score = userLogic.calculateScore(result);
-                socket.emit(Constants.EVENTS.gameShooted, {shooted: result, nextPlayerName: player2Name, score: score});
-                player2Socket.emit(Constants.EVENTS.gameShooted, {shooted: result, nextPlayerName: player2Name, score: score});
+                if (result.type === Constants.WAS_TOLERATED_BOMB) {
+                  userLogic.setBombWasTolerated(socket.id);
+                  var score = userLogic.calculateScore(result.data);
+                  socket.emit(Constants.EVENTS.gameShooted, {
+                    shooted: result.data,
+                    nextPlayerName: player2Name,
+                    score: score
+                  });
+                  player2Socket.emit(Constants.EVENTS.gameShooted, {
+                    shooted: result.data,
+                    nextPlayerName: player2Name,
+                    score: score
+                  });
+                  Util.sendError(socket, Constants.EVENTS.gameWarn, 405, "This is your first bomb and your score is under " + result.bombToleratedScore + ", so you get an extra life!", [result]);
+                }
+                else {
+                  var score = userLogic.calculateScore(result);
+                  socket.emit(Constants.EVENTS.gameShooted, {
+                    shooted: result,
+                    nextPlayerName: player2Name,
+                    score: score
+                  });
+                  player2Socket.emit(Constants.EVENTS.gameShooted, {
+                    shooted: result,
+                    nextPlayerName: player2Name,
+                    score: score
+                  });
+                }
+
+                var isAllFieldShooted = gameLogic.isAllFieldShooted(socket.id);
+                logger.info("isAllFieldShooted", isAllFieldShooted);
+
+                if(isAllFieldShooted) {
+                  var _player1Score = userLogic.getPlayerScore(socket.id);
+                  var _player2Score = userLogic.getPlayerScore(player2Socket.id);
+
+                  var player1ScorModifier = gameLogic.getScoreForFlags(socket.id, player1Name);
+                  var player2ScorModifier = gameLogic.getScoreForFlags(player2Socket.id, player2Name);
+
+                  _player1Score += player1ScorModifier;
+                  _player2Score += player2ScorModifier;
+
+                  var winner = "You have the same score, the game is a draw!";
+                  if(_player1Score > _player2Score) {
+                    winner = player1Name;
+                  }
+                  else if(_player2Score > _player1Score) {
+                    winner = player2Name;
+                  }
+
+                  gameLogic.removeGameByPlayerId(socket.id);
+                  userLogic.resetUser(socket.id);
+                  userLogic.resetUser(player2Id);
+
+                  socket.emit(Constants.EVENTS.gameEnd, {winner: winner, type: Constants.GAME_END_TYPES.allFieldChecked, scores: {myScore: _player1Score, opponentScore: _player2Score}});
+                  player2Socket.emit(Constants.EVENTS.gameEnd, {winner: winner, type: Constants.GAME_END_TYPES.allFieldChecked, scores: {myScore: _player2Score, opponentScore: _player1Score}});
+                }
               }
             }
             else {

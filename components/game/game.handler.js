@@ -18,11 +18,11 @@ function getGameByPlayerId(playerId) {
   });
 }
 
-function isMarkedField(fields, target) {
+function getMarkedField(fields, target) {
   for(var i = 0; i < fields.length; i++) {
     var field = fields[i];
     if(field.x === target.x && field.y === target.y) {
-      return true;
+      return field;
     }
   }
   return false;
@@ -30,10 +30,12 @@ function isMarkedField(fields, target) {
 
 function calculateNextShotForRecursion(shot, neighborType) {
   if(!shot) {
+    logger.warn("calculateNextShotForRecursion", "No shot!", shot, neighborType);
     return null;
   }
   var newShot = {
-    value: shot.value
+    value: shot.value,
+    playerName: shot.playerName
   };
 
   switch (neighborType) {
@@ -155,6 +157,21 @@ function isShootedFieldForRecursion(fields, target) {
   return false;
 }
 
+function calculateShootedFieldsCount(shootedFields) {
+  var count = 0;
+  if(shootedFields) {
+    for(var i = 0; i < shootedFields.length; i++) {
+      if(shootedFields[i].value >= 0) {
+        count++;
+      }
+    }
+  }
+  else {
+    logger.warn("calculateShootedFieldsCount", "shootedFields was falsy");
+  }
+  return count;
+}
+
 module.exports = {
   addNewGame: function(player1Id, player2Id, config, nextPlayerId) {
     var newGame = new Game(player1Id, player2Id, config, nextPlayerId);
@@ -176,7 +193,7 @@ module.exports = {
     var game = getGameByPlayerId(playerId);
     if(game && game.getGameId() && game.getMaxFields()) {
       var tmp = game.getMaxFields();
-      logger.info(game.getGameId(), "Max values:", tmp);
+      logger.info("getMaxFields", game.getGameId(), "Max values:", tmp);
       return tmp;
     }
     return {
@@ -189,17 +206,28 @@ module.exports = {
     if(game && game.getGameId()) {
       var fields = game.getMarkedFields();
       var alreadyShootedFields = game.getShootedFields();
-      var isMarked = isMarkedField(fields, mark);
+      var markedField = getMarkedField(fields, mark);
       var isShooted = isShootedField(alreadyShootedFields, mark);
-      if(isMarked || isShooted) {
-        return {
-          error: Constants.ALREADY_MARKED,
-          data: mark
-        };
+      if(markedField || isShooted) {
+        if(!isShooted && markedField.playerName === playerName && playerName) {
+          mark.type = "unmark";
+          mark.playerName = playerName;
+          _.remove(fields, function(field) {
+            return field.x === mark.x && field.y === mark.y && mark.playerName === field.playerName;
+          });
+          logger.info("remove marked field", game.getGameId(), "This field is now unmarked!", game.getMarkedFields());
+          return mark;
+        }
+        else {
+          return {
+            error: Constants.ALREADY_MARKED,
+            data: mark
+          };
+        }
       }
       mark.playerName = playerName;
       fields.push(mark);
-      logger.info(game.getGameId(), "This field is now marked!", game.getMarkedFields());
+      logger.info("addMarkedField", game.getGameId(), "This field is now marked!", game.getMarkedFields());
       return mark;
     }
     return {
@@ -226,17 +254,23 @@ module.exports = {
           fields: game.getFields()
         };
       }
-      else if(shootedFields.type === Constants.WAS_TOLERATED_BOMB) {
-        alreadyShootedFields.push(shootedFields.data);
-      }
       else {
-        alreadyShootedFields.push(shootedFields);
+        var shootedFieldsCount = calculateShootedFieldsCount(shootedFields);
+        var count = game.increaseShootedFieldsCount(shootedFieldsCount);
+        logger.info("addShootedField", game.getGameId(), "shooted fields count", shootedFieldsCount, count);
+
+        if(shootedFields.type === Constants.WAS_TOLERATED_BOMB) {
+          alreadyShootedFields.push(shootedFields.data);
+        }
+        else {
+          alreadyShootedFields.push(shootedFields);
+        }
       }
 
-      logger.info(game.getGameId(), "These fields are now shooted!", game.getShootedFields());
+      logger.info("addShootedField", game.getGameId(), "These fields are now shooted!", game.getShootedFields());
 
       game.switchNextPlayer();
-      logger.info(game.getGameId(), "Next player turn!", game.getCurrentPlayer());
+      logger.info("addShootedField", game.getGameId(), "Next player turn!", game.getCurrentPlayer());
 
       return shootedFields;
     }
@@ -259,6 +293,28 @@ module.exports = {
     if(game) {
       return game.getFields();
     }
+    logger.warn("getFields", playerId, "Game not found!");
+    return null;
+  },
+  isAllFieldShooted: function(playerId) {
+    var game = getGameByPlayerId(playerId);
+    if(game) {
+      var count = game.increaseShootedFieldsCount(0);
+      var fieldsCount = game.getConfig() ? game.getConfig().x * game.getConfig().y : 0;
+      var bombCount = game.getConfig() ? game.getConfig().mineCount : 0;
+
+      logger.info("isAllFieldShooted", game.getGameId(), "shoot count: " + count, "fields count: " + fieldsCount, "bomb count: " + bombCount);
+      return count >= (fieldsCount - bombCount);
+    }
+    logger.warn("isAllFieldShooted", playerId, "Game not found!");
+    return false;
+  },
+  getMarkedFields: function(playerId) {
+    var game = getGameByPlayerId(playerId);
+    if(game) {
+      return game.getMarkedFields();
+    }
+    logger.warn("getMarkedFields", playerId, "Game not found!");
     return null;
   }
 };

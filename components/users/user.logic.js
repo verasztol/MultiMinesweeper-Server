@@ -62,6 +62,7 @@ module.exports = {
     if(user) {
       return user?user.enemy:null;
     }
+    logger.warn("getUserEnemyId", "User not found!", socketId);
     return null;
   },
   getUserName: function(socketId) {
@@ -74,6 +75,9 @@ module.exports = {
   increaseMarkerCount: function(userName) {
     return UserHandler.increaseMarkerCount(userName);
   },
+  decreaseMarkerCount: function(userName) {
+    return UserHandler.decreaseMarkerCount(userName);
+  },
   getMarkerCount: function(userName) {
     return UserHandler.getMarkerCount(userName);
   },
@@ -84,12 +88,13 @@ module.exports = {
     if(shotData && Array.isArray(shotData) && shotData[0]) {
       var userName = shotData[0].playerName;
       var score = 0;
-      logger.info(userName, "shotData", shotData);
+      logger.info("calculateScore", userName, "shotData", shotData);
       for(var i = 0; i < shotData.length; i++) {
         score += (shotData[i].value + 1) || 1;
       }
       return UserHandler.addScore(userName, score);
     }
+    logger.warn("calculateScore", "ShotData not found!", shotData);
   },
   getBombWasTolerated: function(socketId) {
     return UserHandler.getBombWasTolerated(socketId);

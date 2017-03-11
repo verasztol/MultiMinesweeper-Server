@@ -8,7 +8,7 @@ module.exports = {
       message: message
     };
 
-    logger.warn(socket.id, eventId, error, logData);
+    logger.warn("sendError", socket.id, eventId, error, logData);
     socket.emit(eventId, error);
   },
   sendShortError: function(socket, message, logData) {
@@ -53,6 +53,8 @@ module.exports = {
       case Constants.FIELD_ERROR:
         this.sendError(socket, Constants.EVENTS.gameWarn, 406, "The shooted field was not valid!", result.data);
         break;
+      default:
+        logger.warn("manageError", "Unknown error!", result);
     }
   }
 };

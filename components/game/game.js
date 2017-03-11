@@ -9,6 +9,7 @@ var Game = function Game(_player1Id, _player2Id, _config, _nextPlayerId) {
   var config = _config;
   var markedFields = [];
   var shootedFields = [];
+  var shootedFieldsCount = 0;
 
   this.getGameId = function() {
     return gameId;
@@ -30,6 +31,7 @@ var Game = function Game(_player1Id, _player2Id, _config, _nextPlayerId) {
     if(config) {
       return config.fields;
     }
+    logger.warn("getFields", "Game config not found!");
     return null;
   };
 
@@ -37,6 +39,7 @@ var Game = function Game(_player1Id, _player2Id, _config, _nextPlayerId) {
     if(config) {
       return config.bombTolerateScore;
     }
+    logger.warn("getBombTolerateScore", "Game config not found!");
     return 0;
   };
 
@@ -47,6 +50,12 @@ var Game = function Game(_player1Id, _player2Id, _config, _nextPlayerId) {
   this.switchNextPlayer = function() {
     return nextPlayerId = ((nextPlayerId === player1Id) ? player2Id : player1Id);
   };
+
+  this.increaseShootedFieldsCount = function(count) {
+    count = count || 0;
+    shootedFieldsCount += count;
+    return shootedFieldsCount;
+  }
 
   this.getPublicData = function() {
     return {
@@ -66,6 +75,7 @@ var Game = function Game(_player1Id, _player2Id, _config, _nextPlayerId) {
         maxMarker: config.maxMarker
       }
     }
+    logger.warn("getMaxFields", "Game config not found!");
     return null;
   };
 
@@ -104,7 +114,8 @@ var Game = function Game(_player1Id, _player2Id, _config, _nextPlayerId) {
       markedFields: markedFields,
       maxMarker: config.maxMarker,
       shootedFields: shootedFields,
-      bombTolerateScore: config.bombTolerateScore
+      bombTolerateScore: config.bombTolerateScore,
+      shootedFieldsCount: shootedFieldsCount
     }
   };
 };
