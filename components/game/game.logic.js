@@ -3,12 +3,11 @@ var Constants = require('../constants.js');
 var logger = require('../../log');
 
 var config = {
-  x: 3,
-  y: 3,
+  x: 16,
+  y: 16,
   fields: [],
-  mineCount: 1, // min 3!
-  maxMarker: Math.ceil(51 / 2),
-  bombTolerateScore: -1
+  mineCount: 51, // min 3!
+  maxMarker: Math.ceil(51 / 2)
 };
 
 function setField(x, y) {
