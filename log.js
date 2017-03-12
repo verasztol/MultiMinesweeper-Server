@@ -25,9 +25,9 @@ FirebaseLogger.prototype.log = function (level, msg, meta, callback) {
   var logFolder = this.logFolder + "/" + date.getFullYear() + "-" + date.getMonth() + 1 + "-" + date.getDate();
   var logsRef = database.ref(logFolder).push();
   logsRef.set({
-    level: level,
-    message: msg,
-    meta: meta,
+    level: level || "",
+    message: msg || "",
+    meta: meta || "",
     timestamp: Date.now()
   }, function(error) {
     if(error) {
